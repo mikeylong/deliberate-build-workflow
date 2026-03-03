@@ -1,0 +1,78 @@
+---
+description: Stack rules — Next.js App Router, TypeScript, Tailwind, shadcn/ui, Bun, Biome
+globs: **/*.tsx, **/*.ts
+alwaysApply: true
+---
+
+# Stack Rules
+
+## Package Manager: Bun
+- Always use `bun` — never `npm`, `npx`, or `yarn`
+- Install packages: `bun add [package]`
+- Run scripts: `bun run dev`, `bun run build`
+- Execute one-off commands: `bunx --bun [command]`
+- shadcn component installs: `bunx --bun shadcn@latest add [component]`
+
+## Linter: Biome
+- Biome replaces ESLint and Prettier — do not install or configure either
+- Biome handles both linting and formatting in one tool
+- Do not add `.eslintrc`, `.prettierrc`, or related config files
+- If a lint fix is needed, run `bunx biome check --apply .`
+
+## Next.js App Router
+- Default to Server Components — only add `"use client"` when you actually need browser APIs, event handlers, or hooks
+- Never `"use client"` at the layout level — push it down to the smallest component that needs it
+- Data fetching: fetch in Server Components and pass data down as props. Don't fetch in Client Components unless it's truly client-side dynamic data
+- Use `loading.tsx` and `error.tsx` at the route level — don't reinvent loading/error UI per-component
+- Route handlers go in `app/api/` — keep them thin, logic goes in `lib/`
+- `metadata` export for every page — title and description minimum
+
+## TypeScript
+- No `any` — if you don't know the type, use `unknown` and narrow it
+- Define types/interfaces in `types/` or co-located with the module they belong to
+- Props interfaces named `[ComponentName]Props`
+- Prefer `interface` for object shapes, `type` for unions and intersections
+- Don't suppress TypeScript errors with `@ts-ignore` — fix the type issue
+
+## File & Folder Structure
+```
+src/
+  app/              → routes and layouts only
+  components/       → shared UI components
+    ui/             → shadcn/ui components (don't manually edit these)
+  lib/              → utilities, helpers, constants
+  hooks/            → custom React hooks
+  types/            → shared TypeScript types
+  styles/           → global styles only
+```
+
+## Tailwind
+- Use Tailwind classes, not inline styles
+- No arbitrary values unless the design system genuinely requires it — prefer the scale
+- Extract repeated class combinations into a component, not a custom CSS class
+- `cn()` utility (clsx + tailwind-merge) for conditional class names — always
+
+## Component Patterns
+- One component per file
+- File name = component name (PascalCase)
+- Export as named export AND default export
+- Keep components focused — if a component does more than one thing, split it
+- Co-locate component-specific types, hooks, and helpers in the same file unless they're shared
+
+## Data Fetching
+- `@tanstack/react-query` for client-side data fetching and caching
+- Server Actions for mutations (form submissions, data updates)
+- Never `useEffect` + `fetch` for initial data load — use React Query or Server Components
+- Loading and error states are required for every query
+
+## Performance
+- Images: always use `next/image` — never a raw `<img>` tag
+- Links: always `next/link` — never a raw `<a>` for internal navigation
+- Fonts: always `next/font` — never a manual Google Fonts `<link>`
+- Dynamic imports for heavy components that aren't needed on initial load
+
+## Dependencies
+- Check if something can be done with what's already installed before adding a new package
+- Ask before adding any new dependency — each one has a cost
+- Prefer smaller, focused packages over large frameworks
+- Always use `bun add` — never `npm install`

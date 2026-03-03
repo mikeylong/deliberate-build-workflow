@@ -1,0 +1,355 @@
+---
+description: UX rules — grounded in Peter Ramsey's Built for Mars principles, UX psychology, and experience strategy. Covers friction, vulnerability moments, trust, first-run experience, decision architecture, and honest design.
+globs: **/*.tsx, **/*.ts
+alwaysApply: true
+---
+
+# UX Design Rules
+*Built on Peter Ramsey / Built for Mars + UX psychology principles*
+
+## Before Anything Else: Read the Emotional Core
+
+Before designing any flow, state, or interaction, read `CLAUDE.md` and locate the **Emotional Core** and **Brand Identity** sections. Every UX decision must serve the emotional contract:
+
+- **Before state:** the pain the product resolves — every friction point you eliminate matters
+- **During state:** the emotional tone every interaction must sustain
+- **After state:** the feeling the user leaves with — design the peak and the ending deliberately
+- **Anti-values:** the emotional states this product must never create — use these to reject bad patterns
+
+Microcopy, error messages, empty states, loading copy, button labels — all of it must sound like the Brand Voice defined in CLAUDE.md. Check it before writing any user-facing text.
+
+If CLAUDE.md has no Emotional Core section, stop and say: *"I need the emotional core before making UX decisions. Run `/design-thinking` first."*
+
+---
+
+# UX Design Rules
+*Built on Peter Ramsey / Built for Mars + UX psychology principles*
+
+---
+
+## The Prime Directive
+Every screen, every state, every interaction must answer: **"What does the user do next?"**
+If the answer isn't immediately obvious, the design isn't done.
+
+And before building anything: **understand the human first.**
+- What are they *feeling* when they reach this screen? (stressed, rushed, anxious, focused, confused)
+- What is *their* goal — not the business goal, but what they want to accomplish and move on with their life?
+- What is their context? (desktop at work, first-time, daily power user, under deadline, high stakes)
+
+---
+
+## Friction Is Cumulative — Treat It That Way
+
+Users rarely abandon a product because of one bad moment. They leave because **small irritations stack up** until the product feels "annoying" or "clunky" — and they can't explain why.
+
+- Never dismiss a friction point as "minor" — minor things compound
+- Every extra tap, every unclear label, every loading state without feedback is a withdrawal from the trust account
+- When reviewing a flow: don't ask "does this work?" Ask: "how many small frustrations accumulate from start to finish?"
+- Audit flows end-to-end, not component by component — friction hides in the *transitions* between steps
+
+---
+
+## Moments of Maximum Vulnerability
+
+The moments when users are most confused or frustrated are consistently the **most neglected** in product design. These are where trust is won or permanently lost.
+
+The most common vulnerability moments:
+- **First time in the product** — nothing is familiar, every label is being decoded
+- **After an error** — user is rattled; what happens next determines if they try again
+- **Empty states** — user has completed setup but sees nothing; feels broken
+- **After a destructive action** — delete, cancel, remove; user second-guesses themselves
+- **When something takes longer than expected** — silence reads as failure
+- **When the user gets lost** — no breadcrumb, no "you are here", no way back
+
+**Spend disproportionate design time on these moments.** They are not edge cases.
+
+---
+
+## Psychology Laws — Apply to Every Design Decision
+
+These are the science of how humans process interfaces.
+
+### Cognitive Load
+The brain holds ~4 chunks in working memory. Every element competes for that.
+- **Progressive disclosure:** show only what's needed for the current step
+- **Sensible defaults:** pre-select the most common option — most users accept defaults
+- **Chunking:** group into sets of 3–5 items, never more
+- **Recognition over recall:** show options, don't make users remember
+- **Consistency:** same action always looks and behaves the same way
+
+### Key Laws
+- **Hick's Law:** fewer choices = faster decisions. Beyond 5–7 options, decision quality drops.
+- **Fitts's Law:** important targets should be large and close to where the cursor naturally rests
+- **Jakob's Law:** users prefer interfaces that work like ones they already know — don't reinvent conventions without a strong reason
+- **Peak-end rule:** people judge an entire experience by its peak moment and its ending — not the average. Design the peak and the ending deliberately.
+- **Gestalt proximity:** items close together are perceived as related. Spacing *is* communication.
+
+### Decision Architecture
+How you present choices changes what people choose:
+- **Default bias:** make defaults the best option for most users — they'll rarely change them
+- **Anchoring:** the first option sets expectations for everything after it
+- **Loss aversion:** *"Don't lose your progress"* consistently outperforms *"Save your progress"*. Frame around what users stand to lose, not what they'll gain.
+- **Commitment escalation:** small yeses lead to big yeses — ask for email before asking for credit card
+- **Choice paralysis:** too many equal options causes abandonment. One clear primary action.
+
+### Visual Hierarchy and Scanning
+Users scan in 3 seconds. They don't read.
+- Most important thing first, supporting context second, actions third
+- One hero element per view — if everything is emphasized, nothing is
+- Size, weight, contrast, and whitespace create hierarchy — not decoration
+- Left-aligned content gets more attention than right-aligned
+
+---
+
+## Premature Commitment — Never Ask for More Than You've Earned
+
+Asking users to sign up, pay, or invest effort before they've seen value is one of the most damaging UX mistakes.
+
+- Never gate the core value of a product behind a sign-up wall if it can be avoided
+- Let users explore, try, or preview before asking for an account
+- If sign-up is required, say *specifically* what they get: not "sign up to get started" but "save your work and access it from any device"
+- Collect only what you need right now — ask for more later when there's context for why
+- Small yeses lead to big yeses: email before payment, action before account
+
+---
+
+## The Effort Cliff
+
+Users tolerate effort — but only if it's **expected and proportional**. The moment a flow requires suddenly more effort than anticipated, trust collapses.
+
+- Never spring a long form, required upload, or complex step mid-flow without warning
+- If a step is unavoidably hard, telegraph it early: *"This will take about 3 minutes and you'll need your VAT number."*
+- Break long flows into steps with a progress indicator — visible progress reduces perceived effort
+- Never make a user repeat effort they've already done — pre-fill what you know, persist what they typed
+- If a step can be skipped and done later, let it be skipped
+
+---
+
+## Context Switching Is Expensive
+
+Every time you force a user to leave a flow — to check email, open another app, find a document — you risk losing them entirely. Re-entry is never guaranteed.
+
+- Minimize any step that requires going somewhere else and coming back
+- If a user needs external information (API key, reference number), warn them at the start so they can gather it first
+- When a user does leave and come back, restore their exact state — never make them start over
+
+---
+
+## The Unboxing Principle — First-Time Experience
+
+The first time a user experiences a product is like opening a package. **The order of things matters as much as the things themselves.**
+
+- The first screen should communicate value, not ask for information
+- Onboarding should show, not just tell — let users do the thing, even in limited capacity
+- Don't front-load configuration. Show value first, ask for setup second.
+- The first "aha moment" — when the user actually feels the product doing something useful — should happen as early as possible. Design toward it deliberately.
+- Never show an empty product to a first-time user without guidance. Empty = broken in a new user's mind.
+
+**First-time empty states are different from returning-user empty states.** A new user needs orientation and a clear first action. A returning user who deleted everything just needs a way to create something new. Design them separately.
+
+---
+
+## The Peak-End Rule in Practice
+
+Users remember experiences by two moments: the **peak** (the most intense moment, positive or negative) and the **ending**. Not the average. Not the duration.
+
+Design these deliberately:
+- Identify the peak moment in your product — the moment the user gets the most value or feels the most relieved. Make it feel good.
+- Design the ending: what happens after the main action is complete? What's the last thing they see and feel?
+- A great result screen, a satisfying export confirmation, or a clear "you're done, here's what happens next" can define how the entire experience is remembered.
+
+For Ambit Labs: the peak is the moment breaches appear. The ending is the export. Both deserve disproportionate design attention.
+
+---
+
+## Dead Ends — Every Flow Must Go Somewhere
+
+A dead end is any moment where the user completes an action and doesn't know what to do next.
+
+- After every successful action, tell the user what happened and what they can do next
+- Success states are not the end of a flow — they're a handoff to the next one
+- After deleting something: acknowledge it's gone and offer a logical next action
+- After sign-up: don't just say "account created" — lead them into the product
+
+**The "so what" test:** after every confirmation or success message, ask "so what?" If the answer isn't obvious from the screen, add a next step.
+
+---
+
+## Honest Design — Trust Is the Product
+
+Dark patterns aren't just ethically wrong — they're strategically stupid. Users who feel manipulated don't come back, and they tell people.
+
+- Pricing visible before commitment, not revealed at the last step
+- Cancellation as easy to find as sign-up
+- Toggles and checkboxes reflect their actual state without ambiguity
+- Free trials that auto-convert to paid must say so explicitly with the date and amount
+- Never use fake social proof, fake scarcity, or countdown timers that reset
+
+**The trust test:** would a user feel deceived when they discover how this actually works? If yes, redesign it.
+
+---
+
+## Uncertainty Is Friction
+
+Users tolerate waiting. They cannot tolerate *not knowing*. Silence reads as failure.
+
+- Every async action needs feedback within 100ms — even just a button entering a loading state
+- If something takes more than 2 seconds, show a progress indicator with context ("Uploading your file…")
+- If something might fail, tell the user *before* they invest effort
+- Confirmations should be specific: "Your changes have been saved" beats "Success." "Uploading file 2 of 5" beats a spinner.
+
+---
+
+## Information Scent
+
+Every link, button, and navigation item must clearly signal what's behind it *before* the user clicks.
+
+- Vague labels ("Continue", "Submit", "Click here") have no information scent
+- Specific labels ("Save to Google Drive", "Delete all 47 items", "Send invoice") tell the user exactly what will happen
+- If a user has to click something to find out what it does, the label has failed
+- This applies to empty states, tooltips, and navigation items as much as buttons
+
+---
+
+## Empty States
+
+Empty states are the highest-leverage UX in any product — consistently underdesigned, massively impactful.
+
+Every empty state must:
+1. Acknowledge the emptiness without making the user feel something is broken
+2. Explain *why* it's empty in human terms
+3. Offer **one clear, specific next action** — not two, not a list, one
+4. Optionally: use a visual to soften the moment
+
+```
+✅ "You haven't created any projects yet. [Create your first project]"
+✅ "Once your team adds reports, they'll show up here. [Invite your team]"
+❌ "No records found."
+❌ "Nothing to show here."
+```
+
+Never use system language in empty states.
+
+---
+
+## Error States
+
+Errors are vulnerability moments. Every error must have three parts:
+1. **What happened** — plain language, no technical codes
+2. **Why it happened** — if useful and not condescending
+3. **What to do next** — specific, actionable recovery path
+
+```
+✅ "We couldn't save your changes — your session expired. [Sign in again] Your work has been preserved."
+✅ "That email is already registered. [Sign in instead] or [reset your password]"
+❌ "Error 422"
+❌ "Something went wrong. Please try again."
+```
+
+Error placement:
+- Form field errors: inline, below the field, on blur — not at the top of the form
+- Async/background errors: toast, does NOT auto-dismiss
+- Route-level failures: full-page error with a clear way back
+- Never clear a form on failed submission — preserve everything the user typed
+
+---
+
+## Forms
+
+Forms are the highest-friction interaction in any product.
+
+- Labels always visible — never placeholder-as-label (disappears on focus)
+- Placeholder text = example value: `e.g. jane@example.com`
+- Validate on blur, not on keystroke — don't punish before they're done
+- Never block autofill — let the browser help
+- Never ask for information you don't need right now
+- Multi-step forms: show a progress indicator
+- Submit button: verb + noun specific to the action. "Create account" not "Submit". "Send message" not "OK".
+- After failed submission: preserve all input. Never make a user retype.
+- After successful submission: explicit confirmation, then a clear next step.
+
+---
+
+## Feedback & Confirmation
+
+- Immediate visual feedback on any click — before the async operation resolves
+- Destructive actions: require confirmation Dialog. Confirm button names the thing being destroyed: "Delete 'Q3 Report'" not "Confirm".
+- Prefer **undo over confirmation dialogs** when possible — less friction, same safety
+- Success toasts: specific, brief, auto-dismiss after 4 seconds
+- Error toasts: do NOT auto-dismiss — user needs to read and act
+
+---
+
+## Loading and Perceived Performance
+
+Users feel perceived speed, not actual speed.
+
+- Skeletons immediately for content with a known shape — don't wait for data
+- Optimistic updates: apply changes in UI immediately, roll back if server fails
+- Never load unbounded lists — paginate or virtualize
+- Images: always explicit `width` and `height` to prevent layout shift
+- Anything over 3 seconds needs a progress indicator with context, not just a spinner
+
+---
+
+## Navigation and Orientation
+
+Users need to always know where they are, how they got here, and how to get back.
+
+- Active state always visually distinct
+- Breadcrumbs for anything more than 2 levels deep
+- Back button behavior must be predictable — never surprise users
+- Every meaningful state should have its own URL — sharing and bookmarking must work
+- "Where am I?" should be answerable in 1 second on any screen
+
+---
+
+## Suggest What to Test
+
+After building or reviewing, proactively identify what needs validation:
+
+- **The riskiest assumption** in this design — the thing that, if wrong, breaks the whole flow
+- **Where users are most likely to get stuck** — and what alternative to try if they do
+- **The peak moment** — does it actually feel like a peak, or does it land flat?
+
+Quick validation methods:
+- **5-second test:** show the screen for 5 seconds, ask what they remember and what they'd do
+- **Task completion:** give someone a goal, watch silently if they can achieve it
+- **Think-aloud:** watch someone use it while narrating their thoughts
+- The riskiest assumption is always better validated cheaply before building further
+
+---
+
+## Flows to Get Right Early
+These become exponentially more expensive to fix later:
+
+1. **Authentication** — sign up, sign in, forgot password, session expiry
+2. **First-time experience** — what a brand new user sees and does in the first 2 minutes
+3. **The first "aha moment"** — earliest point the user feels the product doing something valuable
+4. **Save / autosave** — is it clear to the user when their work is persisted?
+5. **Destructive actions** — delete, cancel, remove. Undo where possible, confirmation where not.
+6. **Error recovery** — network drops mid-flow, payment fails, wrong file format
+7. **Offboarding** — cancellation and deletion flows. Honest and easy. Users who leave gracefully sometimes come back.
+
+---
+
+## Self-Verification Checklist
+
+Run this before presenting any UX work. Fix failures before showing anything.
+
+- [ ] New user can understand what to do within 5 seconds?
+- [ ] Most important action is visually dominant?
+- [ ] Every action has visible feedback within 100ms?
+- [ ] Error states answer: what happened + why + what to do next?
+- [ ] Empty states have one clear CTA — never just "no data"?
+- [ ] All flows handle edge cases (0 items, 1 item, 1000 items, missing data)?
+- [ ] No dead ends — every success state has a next step?
+- [ ] No premature commitment — value shown before sign-up or payment?
+- [ ] No context switches without warning?
+- [ ] Loading states use skeletons not spinners (for content with known shape)?
+- [ ] Forms preserve input on failed submission?
+- [ ] Submit buttons use verb + noun specific to the action?
+- [ ] Peak moment and ending designed deliberately (Peak-end rule)?
+- [ ] Works with keyboard only?
+- [ ] Touch targets at least 44×44px?
+- [ ] Color contrast passes WCAG AA?

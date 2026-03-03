@@ -1,0 +1,53 @@
+---
+description: Git workflow — branching, commits, PRs
+globs: **/*
+alwaysApply: false
+---
+
+# Git Rules
+
+## Branch Strategy
+- `main` → production. Never commit directly to main.
+- `dev` → integration branch. Features merge here first.
+- Feature branches off `dev`: `feature/short-description`
+- Bug fixes: `fix/short-description`
+- Chores (deps, config, refactor): `chore/short-description`
+
+## Commit Messages
+Follow conventional commits format:
+```
+type: short description (max 72 chars)
+```
+
+Types:
+- `feat:` new feature
+- `fix:` bug fix
+- `chore:` maintenance, deps, config
+- `refactor:` code change with no behavior change
+- `style:` formatting, whitespace (not CSS)
+- `docs:` documentation only
+
+Examples:
+```
+feat: add user avatar upload
+fix: correct overflow on mobile nav
+chore: update shadcn button component
+refactor: extract auth logic into useAuth hook
+```
+
+- Present tense, lowercase, no period at the end
+- Be specific — "fix bug" is not a useful commit message
+
+## Pull Requests
+- PRs go from feature branch → `dev`, never directly to `main`
+- PR title follows the same format as commit messages
+- Keep PRs focused — one feature or fix per PR
+- If a PR touches UI, include a screenshot or screen recording
+- Squash commits when merging to keep history clean
+
+## Worktrees (for parallel agent work)
+When running multiple Claude agents simultaneously:
+- Each agent creates its own worktree: `git worktree add ../project-feature-name feature/feature-name`
+- Each agent works in its own isolated directory
+- Each agent opens its own PR — never push to another agent's branch
+- Clean up worktrees after merging: `git worktree remove ../project-feature-name`

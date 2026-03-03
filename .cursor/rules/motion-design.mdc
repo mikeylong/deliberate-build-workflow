@@ -1,0 +1,392 @@
+---
+description: Motion design rules — context-aware animation principles drawn from Emil Kowalski, Jakub Krehel, and Jhey Tompkins. Covers timing, enter/exit recipes, motion gaps, accessibility, performance, and anti-patterns.
+globs: **/*.tsx, **/*.ts, **/*.css
+alwaysApply: true
+---
+
+# Motion Design Rules
+*Synthesized from the work of Emil Kowalski (Linear/Vercel), Jakub Krehel (jakub.kr), and Jhey Tompkins (@jh3yy)*
+
+---
+
+## The Prime Directive: Context First
+
+**There are no universal animation rules. Context determines everything.**
+
+Before applying any motion principle, identify the project type:
+
+| Project Type | Lead With | Support With | Use Sparingly |
+|---|---|---|---|
+| Productivity tool (dashboard, SaaS) | Emil — restraint | Jakub — polish | Jhey — empty states only |
+| Shipped consumer app | Jakub — polish | Emil — frequency | Jhey — delight moments |
+| Marketing / landing page | Jakub — polish | Jhey — personality | Emil — forms/nav |
+| Creative portfolio | Jakub — polish | Jhey — experimentation | Emil — high-freq interactions |
+| Kids app / educational | Jakub — polish | Jhey — delight | Emil — game interactions only |
+| Mobile app | Jakub — polish | Emil — speed | Jhey — celebration moments |
+
+**The golden rule**: "The best animation is that which goes unnoticed." If a user *comments* on an animation on every interaction, it's probably too prominent. Exception: kids apps and creative contexts where delight IS the point.
+
+---
+
+## The Three Philosophies
+
+### ⚡ Emil Kowalski — Restraint & Speed
+*Linear, Vercel. Productivity tools.*
+
+Emil's core belief: **most UI doesn't need animation**. When it does, it should be fast, purposeful, and invisible. Users of productivity tools are in flow — animation that calls attention to itself breaks that flow.
+
+Key rules from Emil:
+- Animations on high-frequency interactions (buttons clicked dozens of times a day) should be minimal or absent
+- Keyboard-initiated actions generally should not animate — keyboard users are power users
+- Prefer **transitions over keyframes** for interruptibility — if a user reverses an action mid-animation, CSS transitions handle it gracefully, keyframes don't
+- Never start a scale animation from `scale(0)` — use `scale(0.9)` or higher. Starting from zero looks broken.
+- Set `transform-origin` correctly on dropdowns and popovers — they should originate from the trigger, not the center of the element
+- Duration ceiling for productivity tools: **under 300ms**, ideally around 180ms
+
+### 🎯 Jakub Krehel — Production Polish
+*jakub.kr. Consumer apps, shipped products.*
+
+Jakub's core belief: **polish lives in the details that most people skip**. The difference between a product that feels "good" and one that feels "premium" is usually the enter/exit animations, the hover states, and the shadow choices.
+
+Key rules from Jakub:
+- **Every element that appears needs an enter animation. Every element that disappears needs an exit animation.**
+- Exit animations should be **subtler than enters** — shorter duration, same blur, smaller movement
+- Enter recipe: `opacity 0→1 + translateY 8px→0 + blur 4px→0`, spring with `bounce: 0`, ~450ms
+- Use `AnimatePresence` for every conditional render — no exceptions
+- Hover states need a minimum 150–200ms transition — instant hover feels cheap
+- Icon swaps (e.g., play→pause) should animate with `opacity + scale + blur` together
+- Shadow vs border: use shadows on elements that sit on varied backgrounds, borders on elements with consistent backgrounds
+- Optical alignment: icon+text buttons often need 1–2px vertical adjustment to feel visually centered
+- Springs: `bounce: 0` for professional/neutral, higher bounce for playful contexts
+
+### ✨ Jhey Tompkins — Experimentation & Delight
+*@jh3yy. Creative sites, portfolios, kids apps.*
+
+Jhey's core belief: **CSS and the web platform are more powerful than most people use**. Modern CSS features like `@property`, `linear()` easing, and scroll-driven animations unlock things that feel genuinely novel.
+
+Key rules from Jhey:
+- `@property` enables animating custom properties (gradients, colors, complex values) smoothly — reach for it when standard transitions fall short
+- `linear()` easing lets you craft custom easing curves with bounce, spring, and elastic behavior in pure CSS — no library needed
+- Scroll-driven animations for content reveals, progress indicators, and parallax — native, performant, zero JS
+- Stagger animations on lists/grids: don't stagger every item, only the first 4–6 before the fold
+- Celebration moments (achievements, streaks, completions) deserve real delight — this is where going bigger is appropriate
+- `active:scale-95` on interactive elements for tactile press feedback — simple, satisfying
+
+---
+
+## Motion Gaps — The Most Common Mistake
+
+A **motion gap** is a UI change that happens without any transition. Elements snap in and out. Panels appear instantly. Loading states cut directly to content. These are the most common and most impactful motion problems in any codebase.
+
+**Always audit for motion gaps.** Search for:
+
+```tsx
+// Conditional renders that snap
+{isOpen && <Modal />}           // → needs AnimatePresence
+{mode === 'a' && <PanelA />}    // → needs AnimatePresence
+{isLoading ? <Spinner /> : <Content />}  // → needs AnimatePresence
+
+// Height/size changes without transition
+style={{ height: isExpanded ? 200 : 0 }}  // → needs CSS transition or layout animation
+```
+
+**Where motion gaps hide:**
+- Settings and inspector panels with mode switches
+- Conditional form fields that appear/disappear
+- Tab content areas
+- Expandable/collapsible sections
+- Toast and notification systems
+- Loading → content transitions
+- Error state appearances
+
+**The fix pattern** (Framer Motion):
+```tsx
+import { AnimatePresence, motion } from 'framer-motion'
+
+<AnimatePresence>
+  {isOpen && (
+    <motion.div
+      initial={{ opacity: 0, y: 8, filter: 'blur(4px)' }}
+      animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+      exit={{ opacity: 0, y: 4, filter: 'blur(2px)' }}
+      transition={{ type: 'spring', duration: 0.45, bounce: 0 }}
+    >
+      {children}
+    </motion.div>
+  )}
+</AnimatePresence>
+```
+
+---
+
+## Enter & Exit Recipes
+
+### Standard Enter (Jakub — use for most UI)
+```tsx
+initial={{ opacity: 0, y: 8, filter: 'blur(4px)' }}
+animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+transition={{ type: 'spring', duration: 0.45, bounce: 0 }}
+```
+
+### Standard Exit (subtler than enter)
+```tsx
+exit={{ opacity: 0, y: 4, filter: 'blur(2px)' }}
+// Note: smaller y value, smaller blur — exits should be quieter
+```
+
+### Dropdown / Popover (Emil — originates from trigger)
+```tsx
+initial={{ opacity: 0, scale: 0.95 }}
+animate={{ opacity: 1, scale: 1 }}
+transition={{ duration: 0.15, ease: 'easeOut' }}
+// Set transform-origin to where the trigger is (top, bottom-left, etc.)
+style={{ transformOrigin: 'top left' }}
+```
+
+### Press Feedback (Jakub/Jhey — tactile)
+```tsx
+// Tailwind
+className="active:scale-95 transition-transform duration-100"
+
+// Or Framer Motion
+whileTap={{ scale: 0.95 }}
+```
+
+### Hover State (Jakub — never instant)
+```tsx
+// Minimum 150ms — instant feels cheap
+className="transition-colors duration-150 hover:bg-accent"
+```
+
+### List Stagger (Jhey — first 4–6 items only)
+```tsx
+// Parent
+<motion.ul>
+  {items.slice(0, 6).map((item, i) => (
+    <motion.li
+      key={item.id}
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: i * 0.05, duration: 0.3 }}
+    />
+  ))}
+</motion.ul>
+// Items beyond index 5 appear without stagger
+```
+
+### Icon Swap Animation (Jakub)
+```tsx
+// Use AnimatePresence with mode="wait" for icon swaps
+<AnimatePresence mode="wait">
+  {isPlaying ? (
+    <motion.div key="pause"
+      initial={{ opacity: 0, scale: 0.8, filter: 'blur(4px)' }}
+      animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+      exit={{ opacity: 0, scale: 0.8, filter: 'blur(4px)' }}
+      transition={{ duration: 0.15 }}
+    >
+      <PauseIcon />
+    </motion.div>
+  ) : (
+    <motion.div key="play" /* same animation */ >
+      <PlayIcon />
+    </motion.div>
+  )}
+</AnimatePresence>
+```
+
+---
+
+## Duration Guidelines
+
+Duration is **context-dependent**. Do not apply a single rule everywhere.
+
+| Interaction Type | Duration | Notes |
+|---|---|---|
+| Micro-interactions (press, hover) | 100–150ms | Faster = more responsive |
+| Dropdowns, tooltips | 150–200ms | Emil territory |
+| Panels, drawers, modals | 250–350ms | Jakub territory |
+| Page transitions | 300–500ms | Depends on distance |
+| Celebration/delight | Whatever serves it | Jhey territory |
+| Loading → content | 300–450ms | Don't rush this one |
+
+**Do not flag durations over 300ms as errors without checking project type first.** A 500ms spring on a consumer app modal is correct. The same duration on a productivity tool button is wrong.
+
+---
+
+## Properties: What to Animate and What to Never Touch
+
+**Always safe to animate:**
+- `opacity`
+- `transform` (translate, scale, rotate)
+- `filter` (blur — GPU composited in modern browsers)
+
+**Never animate (causes layout reflow, janky performance):**
+- `width`, `height`
+- `margin`, `padding`
+- `top`, `left`, `right`, `bottom` (use `transform: translate` instead)
+- `font-size`
+
+**For height transitions** (accordions, expandable sections):
+```tsx
+// Use Framer Motion's layout animation instead of animating height
+<motion.div layout>
+  {isExpanded && <Content />}
+</motion.div>
+
+// Or CSS: max-height transition as a last resort (not ideal)
+className="max-h-0 overflow-hidden transition-all duration-300 data-[open]:max-h-96"
+```
+
+---
+
+## Accessibility — Non-Negotiable
+
+**`prefers-reduced-motion` must be respected. No exceptions. Ever.**
+
+Users with vestibular disorders, motion sickness, or epilepsy can be genuinely harmed by animations that ignore this preference. This is not optional.
+
+### The Pattern (Framer Motion)
+```tsx
+import { useReducedMotion } from 'framer-motion'
+
+function AnimatedComponent() {
+  const shouldReduceMotion = useReducedMotion()
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{
+        duration: shouldReduceMotion ? 0.01 : 0.45,
+        type: shouldReduceMotion ? 'tween' : 'spring'
+      }}
+    />
+  )
+}
+```
+
+### CSS Pattern
+```css
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+```
+
+### Rules
+- `opacity` changes are generally fine even with reduced motion — they don't cause vestibular issues
+- `transform: translate` over long distances can cause issues — reduce the distance, don't eliminate the animation entirely
+- `scale` from very small values (0 → 1) can be disorienting — use `scale(0.95) → 1` instead
+- Parallax, scroll-jacking, and large-scale movements are the highest-risk animations
+- Auto-playing decorative animations should pause or stop with reduced motion
+- Test with macOS System Preferences → Accessibility → Reduce Motion enabled
+
+---
+
+## Performance
+
+**GPU-composited properties are always safe:** `transform`, `opacity`, `filter`
+
+**Promote elements to their own layer** when animating complex components:
+```css
+/* Only use when actually needed — unnecessary promotion wastes memory */
+.will-animate {
+  will-change: transform, opacity;
+}
+/* Remove after animation completes */
+```
+
+**Framer Motion performance tips:**
+- Use `layout` animations sparingly — they measure the DOM and can be expensive
+- `AnimatePresence` with many items simultaneously can be costly — stagger or limit
+- Prefer CSS transitions over JS animations for simple hover/focus states
+- `transform` in Framer Motion is hardware accelerated by default
+
+**Never:**
+- Animate `box-shadow` on low-end devices (expensive repaint) — use `opacity` on a pseudo-element instead
+- Run `requestAnimationFrame` loops that touch layout properties
+- Animate more than ~20 elements simultaneously without virtualization
+
+---
+
+## Anti-Patterns to Eliminate
+
+**Instant state changes** — Any conditional render that snaps with no transition. Wrap in `AnimatePresence`.
+
+**Scale from zero** — `scale(0) → scale(1)` looks like a bug. Use `scale(0.9) → scale(1)` minimum.
+
+**Wrong transform-origin** — A dropdown that scales from its center instead of its trigger anchor looks physically wrong. Set `transformOrigin` to match where it's triggered from.
+
+**Symmetric enter/exit** — Exits should be subtler than enters. Using identical animations for both makes exits feel too dramatic.
+
+**CSS keyframes for interactive animations** — Keyframes aren't interruptible. If a user hovers, then quickly un-hovers, a keyframe animation plays through. CSS transitions and Framer Motion handle interruption correctly.
+
+**Animating every item in a long list** — Stagger only the first 4–6 visible items. Animating 50 list items is performance expensive and visually overwhelming.
+
+**Duration mismatch with context** — Fast animations (100ms) on slow, considered interactions feel jarring. Slow animations (500ms) on high-frequency interactions feel sluggish. Match duration to the weight of the action.
+
+**Missing exit animations** — Elements that appear with a nice entrance but disappear instantly are jarring. Every enter needs a corresponding exit.
+
+**Bouncy springs in professional contexts** — `bounce: 0.5+` feels playful and informal. On a finance dashboard or productivity tool, it reads as unpolished. Save bounce for contexts where delight is the goal.
+
+**Overusing blur** — The `blur` filter on enter/exit is a nice touch when used selectively. If every element in the interface blurs in and out, it becomes visual noise.
+
+---
+
+## Framer Motion: Essential Patterns
+
+```tsx
+// Layout animation (size/position changes)
+<motion.div layout />
+
+// Shared layout between components
+<motion.div layoutId="shared-element" />
+
+// Animate presence (mount/unmount)
+<AnimatePresence mode="wait">
+  {condition && <motion.div key="unique-key" />}
+</AnimatePresence>
+
+// Gesture animations
+<motion.button
+  whileHover={{ scale: 1.02 }}
+  whileTap={{ scale: 0.98 }}
+/>
+
+// Variants (reusable animation sets)
+const variants = {
+  hidden: { opacity: 0, y: 8 },
+  visible: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: 4 }
+}
+<motion.div variants={variants} initial="hidden" animate="visible" exit="exit" />
+
+// Stagger children
+const containerVariants = {
+  visible: {
+    transition: { staggerChildren: 0.05 }
+  }
+}
+```
+
+---
+
+## Quick Audit Checklist
+
+Before shipping any animated component, run through these:
+
+- [ ] Is every conditional render wrapped in `AnimatePresence`?
+- [ ] Do exits exist and are they subtler than enters?
+- [ ] Is `useReducedMotion()` checked and respected?
+- [ ] Are only `transform` and `opacity` (and `filter`) being animated?
+- [ ] Is `transform-origin` set correctly on dropdowns/popovers?
+- [ ] Are hover transitions at least 150ms?
+- [ ] Is scale starting from 0.9+ not 0?
+- [ ] Is the duration appropriate for the project type?
+- [ ] Are list stagger animations limited to first 4–6 items?
+- [ ] Do springs use `bounce: 0` in professional contexts?

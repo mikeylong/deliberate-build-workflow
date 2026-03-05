@@ -4,6 +4,8 @@ A complete system for going from idea to working product — alone, fast, withou
 
 Built for Cursor and Claude Code. Works for engineers, designers, PMs, or anyone with an idea to ship.
 
+The skills work in any AI-enabled editor or tool — VS Code, Windsurf, or Claude directly. The sequence is what matters, not the platform.
+
 ---
 
 ## What's inside
@@ -23,6 +25,8 @@ build-workflow/
 │       ├── motion-design.mdc   ← Animation, Framer Motion, reduced motion
 │       ├── stack.mdc           ← Opinionated defaults and conventions
 │       └── git.mdc             ← Commit conventions, branch strategy
+├── docs/
+│   └── how-to-use.md           ← The mode sequence, model selection, building in parts
 └── install.sh                  ← One-command install
 ```
 
@@ -33,8 +37,8 @@ build-workflow/
 Clone the repo and run the install script:
 
 ```bash
-git clone https://github.com/yourusername/build-workflow.git
-cd build-workflow
+git clone https://github.com/AI-by-design/Design-workflow.git
+cd Design-workflow
 chmod +x install.sh
 ./install.sh
 ```
@@ -100,6 +104,37 @@ Structured planning before implementation. Breaks the work into phases, surfaces
 ```
 
 Structured debugging. Reproduces the problem, isolates the cause, fixes it without breaking anything else.
+
+---
+
+## The mode sequence
+
+Think of the workflow in three stages. If you're using Cursor, these map to Ask, Plan, and Agent modes. If you're using any other tool, the stages still apply — they're a mental model for how to think, not a Cursor-specific feature.
+
+```
+Ask    →  /design-thinking
+Plan   →  /plan
+Build  →  agent mode, or equivalent in your tool
+```
+
+Most people skip straight to building. Something comes out. It looks like progress. It isn't — it's chaos that will need unpicking later.
+
+The sequence exists for a reason. Don't skip it.
+
+**Ask + /design-thinking**
+Before you touch anything, invoke `/design-thinking`. You're not writing code yet. You're making sure you understand what you're building and why — the problem, the person, the feeling the product needs to create. The skill walks you through this in three phases with hard gates between them.
+
+Don't skip this because you think you already know what you want. The skill exists to surface what you don't know you don't know.
+
+**Plan + /plan**
+Once `/design-thinking` is complete and `CLAUDE.md` has the brief, invoke `/plan`. The skill breaks the work into parts — frontend, backend, middleware — and then breaks each part into specific tasks.
+
+Be precise. Vague prompts produce vague plans. If the plan doesn't feel right, don't add a new prompt on top of it. Edit the original one. Think it through again.
+
+**Build**
+Only start building when the plan is solid. Build one part at a time. Connect as you go. Do not ask the agent to build frontend, backend, and database simultaneously — it produces something that looks like progress but isn't.
+
+For a deeper guide on the sequence — including how to tighten your plan before building and which model to use for which task — see [docs/how-to-use.md](docs/how-to-use.md).
 
 ---
 

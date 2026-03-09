@@ -4,6 +4,15 @@ A Codex-first system for going from idea to working product without skipping dis
 
 This repository used to center Claude Code commands and Cursor rules. It now treats Codex as the primary workflow and keeps the older assets only as deprecated reference material.
 
+## Attribution
+
+This repository is a Codex-focused adaptation of the original `Design-workflow` project by Ana State.
+
+Original repository:
+- [AI-by-design/Design-workflow](https://github.com/AI-by-design/Design-workflow)
+
+This repo is maintained independently and is not the canonical upstream.
+
 ## What's inside
 
 ```text
@@ -85,15 +94,6 @@ bash tests/run.sh
 The tests cover `setup-codex.sh`, `install.sh`, and `build-workflow/install.sh` without requiring any external test framework.
 
 GitHub Actions CI runs the same command on pushes and pull requests.
-
-## Attribution
-
-This repository is a Codex-focused adaptation of the original `Design-workflow` project by Ana State.
-
-Original repository:
-- [AI-by-design/Design-workflow](https://github.com/AI-by-design/Design-workflow)
-
-This repo is maintained independently and is not the canonical upstream.
 
 ## Legacy Compatibility
 

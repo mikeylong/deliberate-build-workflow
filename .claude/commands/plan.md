@@ -1,3 +1,5 @@
+# Deprecated: legacy Claude Code command. Maintained Codex playbook: `docs/workflows/plan.md`.
+
 # Plan
 **Mode: PLAN only. No code. No implementation. No files created.**
 

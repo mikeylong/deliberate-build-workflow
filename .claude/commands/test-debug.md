@@ -1,3 +1,5 @@
+# Deprecated: legacy Claude Code command. Maintained Codex playbook: `docs/workflows/test-debug.md`.
+
 # Test & Debug
 **Mode: TEST/DEBUG. The build is done. Now verify it's actually right.**
 

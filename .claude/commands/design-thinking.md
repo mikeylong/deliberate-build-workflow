@@ -1,3 +1,5 @@
+# Deprecated: legacy Claude Code command. Maintained Codex playbook: `docs/workflows/design-thinking.md`.
+
 # Design Thinking + Brand Foundation
 **Mode: ASK only. Do not plan. Do not build. Do not propose solutions.**
 

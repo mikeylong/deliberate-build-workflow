@@ -1,181 +1,112 @@
-# Build Workflow
+# Design Workflow for Codex
 
-A complete system for going from idea to working product — alone, fast, without skipping the thinking.
+A Codex-first system for going from idea to working product without skipping discovery, planning, or verification.
 
-Built for Cursor and Claude Code. Works for engineers, designers, PMs, or anyone with an idea to ship.
-
-The skills work in any AI-enabled editor or tool — VS Code, Windsurf, or Claude directly. The sequence is what matters, not the platform.
-
----
+This repository used to center Claude Code commands and Cursor rules. It now treats Codex as the primary workflow and keeps the older assets only as deprecated reference material.
 
 ## What's inside
 
-```
-build-workflow/
-├── .claude/
-│   └── commands/               ← Claude Code skills (global)
-│       ├── design-thinking.md  ← Problem space + emotional core + brand identity
-│       ├── new-project.md      ← Full project scaffolding in one command
-│       ├── plan.md             ← Structured planning before building
-│       └── test-debug.md       ← Structured debugging when things break
-├── .cursor/
-│   └── rules/                  ← Cursor rules (global)
-│       ├── ui-design.mdc       ← Visual systems, spacing, typography, components
-│       ├── ux-design.mdc       ← UX principles, psychology laws, honest design
-│       ├── motion-design.mdc   ← Animation, Framer Motion, reduced motion
-│       ├── stack.mdc           ← Opinionated defaults and conventions
-│       └── git.mdc             ← Commit conventions, branch strategy
-├── docs/
-│   └── how-to-use.md           ← The mode sequence, model selection, building in parts
-└── install.sh                  ← One-command install
+```text
+AGENTS.md                     Canonical brief and operating rules
+docs/workflows/
+  design-thinking.md         Discovery and brief creation
+  plan.md                    Decision-complete planning
+  new-project.md             New-project scaffolding guidance
+  test-debug.md              Verification and debugging workflow
+setup-codex.sh               Local bootstrap and scaffold helper
+.claude/                     Deprecated legacy reference
+.cursor/                     Deprecated legacy reference
 ```
 
----
-
-## Install
-
-Clone the repo and run the install script:
+## Quick Start
 
 ```bash
-git clone https://github.com/AI-by-design/Design-workflow.git
-cd Design-workflow
-chmod +x install.sh
-./install.sh
+git clone https://github.com/mikeylong/design-workflow.git
+cd design-workflow
+chmod +x setup-codex.sh
+./setup-codex.sh --check
 ```
 
-The script copies Claude Code skills to `~/.claude/commands/` so they work in every project. Then follow the prompts to add the Cursor rules globally.
+Then:
 
----
+1. Read `AGENTS.md`.
+2. Start with `docs/workflows/design-thinking.md`.
+3. Move to `docs/workflows/plan.md` before implementation.
 
-## Manual install
+This workflow is local to the repository. It does not copy files into `~/.claude`, `~/.cursor`, or `$CODEX_HOME`.
 
-**Claude Code skills:**
+## Core Flow
+
+The sequence is the product:
+
+```text
+Discovery  -> docs/workflows/design-thinking.md
+Plan       -> docs/workflows/plan.md
+Build      -> implement against AGENTS.md and PLAN.md
+Verify     -> docs/workflows/test-debug.md
+```
+
+Do not start in build mode on a new product or major feature. The workflow assumes the agent is only as good as the context it receives.
+
+## Canonical Brief
+
+In the Codex version, `AGENTS.md` replaces `CLAUDE.md`.
+
+Use it to hold:
+- problem space
+- emotional core
+- brand identity
+- stack decisions
+- v1 scope
+- long-lived conventions and decisions
+
+If you need cross-tool compatibility later, treat `AGENTS.md` as the source of truth and derive other files from it.
+
+## Bootstrap Script
+
+`setup-codex.sh` supports two local workflows:
+
 ```bash
-mkdir -p ~/.claude/commands
-cp .claude/commands/*.md ~/.claude/commands/
+./setup-codex.sh --check
+./setup-codex.sh --scaffold /path/to/new/project
 ```
 
-**Cursor rules:**
-Open Cursor → Settings → Rules for AI. Paste the contents of each `.mdc` file from `.cursor/rules/` into the global rules field. They apply to every project automatically.
+- `--check` verifies the repository has the required Codex workflow files.
+- `--scaffold` copies this workflow into an empty target directory as a starter kit.
 
----
+## Testing
 
-## How to use it
+Run the zero-dependency shell test suite with:
 
-### Starting a new project
-
-```
-/new-project
+```bash
+bash tests/run.sh
 ```
 
-Scaffolds everything in one go: Next.js, TypeScript, Tailwind, shadcn/ui, Bun, Git, GitHub repo, and Vercel — plus a `CLAUDE.md` brief in the project root. Asks three questions first, then handles the rest.
+The tests cover `setup-codex.sh`, `install.sh`, and `build-workflow/install.sh` without requiring any external test framework.
 
-### Before writing any code
+GitHub Actions CI runs the same command on pushes and pull requests.
 
-```
-/design-thinking
-```
+## Legacy Compatibility
 
-Three phases with hard gates between them. Do not skip this.
+The original Claude/Cursor assets remain in:
+- `.claude/`
+- `.cursor/`
+- `install.sh`
+- `build-workflow/`
 
-**Phase 1 — Problem Space**
-What breaks, for whom, and when. One sentence, user's words. Locked before moving on.
+They are deprecated and not the maintained onboarding path. Their purpose is reference and migration only.
 
-**Phase 2 — Emotional Core**
-How the user feels before, during, and after using the product. This is where brand identity comes from — not a mood board, but the emotional promise the product makes. Four questions: before, during, after, and what it must never feel like.
+## Philosophy
 
-**Phase 3 — Solution Space + Brand Identity**
-The aesthetic direction is derived from the emotional core, not chosen arbitrarily. Every visual decision must be argued, not named. Output: a complete brief written into `CLAUDE.md` and a project-specific Cursor rule for the visual system.
+The workflow is built on a simple constraint: agents make better decisions when the brief is explicit, the scope is bounded, and the order of work is deliberate.
 
-Every build session that follows works against this brief.
+That means:
+- discovery before design direction
+- planning before implementation
+- verification against both behavior and intent
 
-### When you're ready to build
+The result should feel less like vibe coding and more like disciplined product development.
 
-```
-/plan
-```
+## Additional Guide
 
-Structured planning before implementation. Breaks the work into phases, surfaces dependencies, flags unknowns before they become blockers.
-
-### When something breaks
-
-```
-/test-debug
-```
-
-Structured debugging. Reproduces the problem, isolates the cause, fixes it without breaking anything else.
-
----
-
-## The mode sequence
-
-Think of the workflow in three stages. If you're using Cursor, these map to Ask, Plan, and Agent modes. If you're using any other tool, the stages still apply — they're a mental model for how to think, not a Cursor-specific feature.
-
-```
-Ask    →  /design-thinking
-Plan   →  /plan
-Build  →  agent mode, or equivalent in your tool
-```
-
-Most people skip straight to building. Something comes out. It looks like progress. It isn't — it's chaos that will need unpicking later.
-
-The sequence exists for a reason. Don't skip it.
-
-**Ask + /design-thinking**
-Before you touch anything, invoke `/design-thinking`. You're not writing code yet. You're making sure you understand what you're building and why — the problem, the person, the feeling the product needs to create. The skill walks you through this in three phases with hard gates between them.
-
-Don't skip this because you think you already know what you want. The skill exists to surface what you don't know you don't know.
-
-**Plan + /plan**
-Once `/design-thinking` is complete and `CLAUDE.md` has the brief, invoke `/plan`. The skill breaks the work into parts — frontend, backend, middleware — and then breaks each part into specific tasks.
-
-Be precise. Vague prompts produce vague plans. If the plan doesn't feel right, don't add a new prompt on top of it. Edit the original one. Think it through again.
-
-**Build**
-Only start building when the plan is solid. Build one part at a time. Connect as you go. Do not ask the agent to build frontend, backend, and database simultaneously — it produces something that looks like progress but isn't.
-
-For a deeper guide on the sequence — including how to tighten your plan before building and which model to use for which task — see [docs/how-to-use.md](docs/how-to-use.md).
-
----
-
-## The CLAUDE.md file
-
-Every project gets a `CLAUDE.md` in the root. It carries the problem space, emotional core, brand identity, stack decisions, and known patterns for that specific product.
-
-Every Claude Code session opens by reading it. Every Cursor session references it for visual and UX decisions. It's not a README — it's the brief the agent works from.
-
-Created by `/new-project`. Filled in by `/design-thinking`. Grows as the project evolves.
-
----
-
-## The Cursor rules
-
-The craft layer — runs on every file, every project, automatically.
-
-**ui-design.mdc** — 8pt grid, 60-30-10 colour rule, typography scale, component states, motion patterns, and a self-verification checklist the agent runs before presenting any UI work.
-
-**ux-design.mdc** — Peter Ramsey / Built for Mars principles, Hick's Law, Peak-end rule, decision architecture, honest design, and structured patterns for empty states, errors, and forms.
-
-**motion-design.mdc** — what to animate (opacity, transform), what never to animate (width, height, padding), Framer Motion recipes, reduced motion handling.
-
-**stack.mdc** — Bun over npm always, shadcn/ui before building from scratch, when to add a dependency and when not to.
-
-**git.mdc** — commit message format, branch naming, what never to commit.
-
-The rules are opinionated. That's the point. They encode decisions so you don't have to make them again.
-
----
-
-## The philosophy
-
-This workflow is built on the assumption that **an agent is only as good as the context you give it.**
-
-The design thinking skill ensures the problem is understood before anything is built. `CLAUDE.md` gives every session the full brief. The Cursor rules give the agent a craft foundation it carries into every file. Together, the system builds like someone who has done this before — not vibe-coding, but deliberate product development.
-
-You don't need to be an engineer to use this. You need to be someone who cares about building the right thing well.
-
----
-
-## Contributing
-
-This is a living system. If you find something missing, wrong, or improvable — open a PR or an issue. The whole point of sharing it is to make it better.
+For a longer explanation of how to use the Codex workflow, see [docs/how-to-use.md](docs/how-to-use.md).

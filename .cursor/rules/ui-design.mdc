@@ -4,6 +4,8 @@ globs: **/*.tsx, **/*.css, **/*.ts
 alwaysApply: true
 ---
 
+# Deprecated: legacy Cursor rule. Codex source of truth is `AGENTS.md`.
+
 # UI Design Rules
 
 ## Before Anything Else: Read the Brand

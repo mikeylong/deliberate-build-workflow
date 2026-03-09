@@ -4,6 +4,8 @@ globs: **/*.tsx, **/*.ts, **/*.css
 alwaysApply: true
 ---
 
+# Deprecated: legacy Cursor rule. Codex source of truth is `AGENTS.md`.
+
 # Motion Design Rules
 *Synthesized from the work of Emil Kowalski (Linear/Vercel), Jakub Krehel (jakub.kr), and Jhey Tompkins (@jh3yy)*
 

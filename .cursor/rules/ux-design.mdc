@@ -4,6 +4,8 @@ globs: **/*.tsx, **/*.ts
 alwaysApply: true
 ---
 
+# Deprecated: legacy Cursor rule. Codex source of truth is `AGENTS.md`.
+
 # UX Design Rules
 *Built on Peter Ramsey / Built for Mars + UX psychology principles*
 

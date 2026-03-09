@@ -1,3 +1,5 @@
+# Deprecated: legacy Claude Code command. Maintained Codex playbook: `docs/workflows/new-project.md`.
+
 # New Project Setup
 
 Automates full project scaffolding using Bun. Run this at the start of every new project.

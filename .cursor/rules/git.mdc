@@ -4,6 +4,8 @@ globs: **/*
 alwaysApply: false
 ---
 
+# Deprecated: legacy Cursor rule. Codex source of truth is `AGENTS.md`.
+
 # Git Rules
 
 ## Branch Strategy

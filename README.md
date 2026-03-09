@@ -1,12 +1,12 @@
-# Design Workflow for Codex
+# Deliberate Build Workflow
 
-A Codex-first system for going from idea to working product without skipping discovery, planning, or verification.
+A deliberate workflow for going from idea to working product without skipping discovery, planning, or verification.
 
-This repository used to center Claude Code commands and Cursor rules. It now treats Codex as the primary workflow and keeps the older assets only as deprecated reference material.
+This repository started as a Claude Code and Cursor workflow. This edition keeps the same core process while adapting it into a repo-local, tool-neutral workflow, with the older assets kept only as deprecated reference material.
 
 ## Attribution
 
-This repository is a Codex-focused adaptation of the original `Design-workflow` project by Ana State.
+This repository is an independently maintained adaptation of the original `Design-workflow` project by Ana State.
 
 Original repository:
 - [AI-by-design/Design-workflow](https://github.com/AI-by-design/Design-workflow)
@@ -30,8 +30,8 @@ setup-codex.sh               Local bootstrap and scaffold helper
 ## Quick Start
 
 ```bash
-git clone https://github.com/mikeylong/design-workflow.git
-cd design-workflow
+git clone https://github.com/mikeylong/deliberate-build-workflow.git
+cd deliberate-build-workflow
 chmod +x setup-codex.sh
 ./setup-codex.sh --check
 ```
@@ -59,7 +59,7 @@ Do not start in build mode on a new product or major feature. The workflow assum
 
 ## Canonical Brief
 
-In the Codex version, `AGENTS.md` replaces `CLAUDE.md`.
+In this version, `AGENTS.md` replaces `CLAUDE.md`.
 
 Use it to hold:
 - problem space
@@ -80,7 +80,7 @@ If you need cross-tool compatibility later, treat `AGENTS.md` as the source of t
 ./setup-codex.sh --scaffold /path/to/new/project
 ```
 
-- `--check` verifies the repository has the required Codex workflow files.
+- `--check` verifies the repository has the required workflow files.
 - `--scaffold` copies this workflow into an empty target directory as a starter kit.
 
 ## Testing
@@ -118,4 +118,4 @@ The result should feel less like vibe coding and more like disciplined product d
 
 ## Additional Guide
 
-For a longer explanation of how to use the Codex workflow, see [docs/how-to-use.md](docs/how-to-use.md).
+For a longer explanation of how to use the workflow, see [docs/how-to-use.md](docs/how-to-use.md).

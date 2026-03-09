@@ -86,6 +86,15 @@ The tests cover `setup-codex.sh`, `install.sh`, and `build-workflow/install.sh` 
 
 GitHub Actions CI runs the same command on pushes and pull requests.
 
+## Attribution
+
+This repository is a Codex-focused adaptation of the original `Design-workflow` project by Ana State.
+
+Original repository:
+- [AI-by-design/Design-workflow](https://github.com/AI-by-design/Design-workflow)
+
+This repo is maintained independently and is not the canonical upstream.
+
 ## Legacy Compatibility
 
 The original Claude/Cursor assets remain in:
